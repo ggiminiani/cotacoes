@@ -16,21 +16,21 @@ hbs.registerPartials(partialsPath)
 app.use(express.static(publicDirectoryPath))
 
 app.get('', (req, res) => {
-    res.render('index',{
+    res.render('index', {
         title: 'Cotações',
         author: 'Biharck'
     })
 })
 
 app.get('/about', (req, res) => {
-    res.render('about',{
+    res.render('about', {
         title: 'Sobre',
         author: 'Biharck Araújo'
     })
 })
 
 app.get('/help', (req, res) => {
-    res.render('help',{
+    res.render('help', {
         title: 'Ajuda',
         author: 'Biharck Araújo'
     })
@@ -38,11 +38,11 @@ app.get('/help', (req, res) => {
 
 app.get('/cotacoes', (req, res) => {
 
-    if(!req.query.ativo){
+    if (!req.query.ativo) {
         return res.status(400).json({
-            error : {
+            error: {
                 mensage: 'O ativo deve ser informado como query parameter',
-                code : 400
+                code: 400
             }
         })
     }
@@ -50,12 +50,14 @@ app.get('/cotacoes', (req, res) => {
     const symbol = req.query.ativo.toUpperCase()
 
     cotacoes(symbol, (err, body) => {
-        if(err){
-                    
-            return res.status(err.code).json({error : {
-                mensage: err.mensage,
-                code : err.code
-            }})
+        if (err) {
+
+            return res.status(err.code).json({
+                error: {
+                    mensage: err.mensage,
+                    code: err.code
+                }
+            })
         }
         res.status(200).json(body)
     })
@@ -63,22 +65,25 @@ app.get('/cotacoes', (req, res) => {
 })
 
 app.get('/help/*', (req, res) => {
-    
+
     res.render('404', {
-        title : '404',
-        errorMessage : 'Não existe página depois de /help',
+        title: '404',
+        errorMessage: 'Não existe página depois de /help',
         author: 'Biharck Araújo'
     })
 })
 
 app.get('*', (req, res) => {
     res.render('404', {
-        title : '404',
-        errorMessage : 'Página não encontrada',
+        title: '404',
+        errorMessage: 'Página não encontrada',
         author: 'Biharck Araújo'
     })
 })
 
-app.listen(3000, () => {
-    console.log('server is up on port 3000')
+
+const port = process.env.port || 3000
+
+app.listen(port, () => {
+    console.log(`server is up on port ${port} `)
 })
